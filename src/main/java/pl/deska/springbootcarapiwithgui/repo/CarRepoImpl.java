@@ -1,25 +1,24 @@
-package pl.deska.springbootcarapiwithgui.service;
-
+package pl.deska.springbootcarapiwithgui.repo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import pl.deska.springbootcarapiwithgui.model.Car;
 import pl.deska.springbootcarapiwithgui.model.Color;
-import pl.deska.springbootcarapiwithgui.repo.CarRepository;
+
 
 
 import java.util.List;
 import java.util.Optional;
 
 
-@Service
-public class CarService {
+@Repository
+public class CarRepoImpl {
 
     private CarRepository carRepo;
 
     @Autowired
-    public CarService(CarRepository carRepo) {
+    public CarRepoImpl(CarRepository carRepo) {
         this.carRepo = carRepo;
     }
 

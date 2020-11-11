@@ -7,7 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.deska.springbootcarapiwithgui.model.Car;
 import pl.deska.springbootcarapiwithgui.model.Range;
-import pl.deska.springbootcarapiwithgui.service.CarService;
+import pl.deska.springbootcarapiwithgui.repo.CarRepoImpl;
+import pl.deska.springbootcarapiwithgui.repo.CarRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,18 +19,18 @@ import java.util.Optional;
 @RequestMapping("/")
 public class CarController {
 
-    private CarService carService;
+    private CarRepository carRepo;
     private String message = "";
 
     @Autowired
-    public CarController(CarService carService) {
-        this.carService = carService;
+    public CarController(CarRepository carService) {
+        this.carRepo = carService;
     }
 
 
     @GetMapping
     public String homePage(Model model) {
-        List<Car> carsList = carService.findAll();
+        List<Car> carsList = carRepo.findAll();
         model.addAttribute("carsList", carsList);
         return "home";
     }
@@ -43,7 +44,7 @@ public class CarController {
 
     @PostMapping("/addCar")
     public String addCar(@ModelAttribute Car car) {
-        carService.save(car);
+        carRepo.save(car);
         return "redirect:/";
     }
 
@@ -58,7 +59,7 @@ public class CarController {
 
     @PostMapping("/searchCars")
     public String searchBetweenYears(@ModelAttribute Range range, Model model) {
-        List<Car> carsList = carService.findAllByProductionYear(range.getFrom(), range.getTo());
+        List<Car> carsList = carRepo.findCarsByProductionYearIsBetween(range.getFrom(), range.getTo());
         if (!carsList.isEmpty()) {
             model.addAttribute("carsList", carsList);
         } else {
@@ -72,7 +73,7 @@ public class CarController {
 
     @PostMapping("/searchById")
     public String searchById(@ModelAttribute Car car, Model model) {
-        Optional<Car> optionalCar = carService.findById(car.getId());
+        Optional<Car> optionalCar = carRepo.findById(car.getId());
         if (optionalCar.isPresent()) {
             model.addAttribute("carsList", Collections.singleton(optionalCar.get()));
         } else {
@@ -87,7 +88,7 @@ public class CarController {
 
     @GetMapping("/update/{id}")
     public String showUpdateCarForm(@PathVariable Long id, Model model) {
-        Car car = carService.findById(id).get();
+        Car car = carRepo.findById(id).get();
         model.addAttribute("car", car);
         return "update-car";
         }
@@ -95,14 +96,14 @@ public class CarController {
 
     @PostMapping("/updateCar")
     public String updateCar(@ModelAttribute Car updatedCar) {
-        carService.save(updatedCar);
+        carRepo.save(updatedCar);
         return "redirect:/";
     }
 
 
     @GetMapping("/delete/{id}")
     public String showDeleteCarForm(@PathVariable Long id) {
-        carService.deleteById(id);
+        carRepo.deleteById(id);
         return "redirect:/";
     }
 

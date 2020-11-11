@@ -7,12 +7,11 @@ import pl.deska.springbootcarapiwithgui.model.Car;
 
 import java.util.List;
 
-
+@Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
     List<Car> findCarsByProductionYearIsBetween(int from, int to);
 
-    List<Car> findAll();
 
 
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
     private String mark;
     private String model;
     @Enumerated(value = EnumType.STRING)
